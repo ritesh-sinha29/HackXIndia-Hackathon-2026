@@ -124,22 +124,12 @@ const MessagesId = () => {
       (payload) => {
         const newMessage = payload.new as Message;
 
-        // Only add if it belongs to this conversation AND not already in state (to avoid duplicates)
+        // Only add if it belongs to this conversation
         if (
-          ((newMessage.sender_id === String(user.id) && newMessage.receiver_id === String(profileId)) ||
-          (newMessage.sender_id === String(profileId) && newMessage.receiver_id === String(user.id)))
+          (newMessage.sender_id === String(user.id) && newMessage.receiver_id === profileId) ||
+          (newMessage.sender_id === profileId && newMessage.receiver_id === String(user.id))
         ) {
-          setMessages((prev) => {
-            // Avoid duplicates
-            if (prev.some(msg => msg.id === newMessage.id)) {
-              return prev;
-            }
-            return [...prev, newMessage];
-          });
-          // Scroll to bottom on new message
-          setTimeout(() => {
-            bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-          }, 100);
+          setMessages((prev) => [...prev, newMessage]);
         }
       }
     )
@@ -153,26 +143,17 @@ const MessagesId = () => {
   const sendMessage = async () => {
     if (!text.trim() || !user?.id || !profileId || !profileType) return;
 
-    const messageContent = text;
-    setText(""); // Clear input immediately for better UX
-
-    const { data, error } = await supabase.from("messages").insert({
-      sender_id: String(user.id),
-      receiver_id: String(profileId),
+    const { error } = await supabase.from("messages").insert({
+      sender_id: user.id,
+      receiver_id: profileId,
       receiver_type: profileType,
-      content: messageContent,
-    }).select().single();
+      content: text,
+    });
 
     if (error) {
       console.error("Send error:", error);
-      setText(messageContent); // Restore text on error
-    } else if (data) {
-      // Optimistically add message to UI
-      setMessages((prev) => [...prev, data as Message]);
-      // Scroll to bottom
-      setTimeout(() => {
-        bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-      }, 100);
+    } else {
+      setText(""); 
     }
   };
 
@@ -227,7 +208,6 @@ const MessagesId = () => {
             </div>
           ))
         )}
-        <div ref={bottomRef} />
       </div>
       <div className="flex border-t p-3 gap-2 bg-white flex-shrink-0">
         <Input

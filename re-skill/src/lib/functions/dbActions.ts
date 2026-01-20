@@ -519,7 +519,7 @@ export async function triggerSessionNotification({
   const message = `You have requested a ${sessionType} session with ${mentorName} (status: pending) on ${scheduledAt.toLocaleString()}`;
 
   useNotificationStore.getState().addNotification({
-    userId,
-    message,
+      userId,
+      message,
   });
 }
