@@ -5,6 +5,7 @@
 import { GoogleGenAI } from "@google/genai";
 import { Type } from "@google/genai";
 import { getSelectedCareer, updateSelectedCareer } from "./dbActions";
+import { retrivalServer } from "./pineconeQuery";
 import { toast } from "sonner";
 // import { tavilySearching } from "./tavily";
 
@@ -77,19 +78,8 @@ export async function tavilySearch(query: string): Promise<string> {
 async function retrival(userQuery: string): Promise<string> {
   try {
     console.log("====Pinecone query called===");
-    const res = await fetch("/api/ai/retrieval", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userQuery }),
-    });
-
-    const data = await res.json();
-
-    if (!res.ok || !data.result) {
-      throw new Error(data.error || "No results from Pinecone");
-    }
-
-    return data.result;
+    const result = await retrivalServer(userQuery);
+    return result;
   } catch (err) {
     console.error("Error in retrival tool:", err);
     return "";
