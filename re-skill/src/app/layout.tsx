@@ -1,15 +1,26 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Sora, Inter, Raleway } from "next/font/google";
 import "./globals.css";
+import { Toaster } from "@/components/ui/sonner";
+import { UserDataProvider } from "@/context/UserDataProvider";
+import { InterviewProvider } from "@/context/InterviewContext";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const sora = Sora({
   subsets: ["latin"],
+  variable: "--font-sora",
+  weight: ["400", "600", "700"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const inter = Inter({
   subsets: ["latin"],
+  variable: "--font-inter",
+  weight: ["400", "600", "700"],
+});
+
+const raleway = Raleway({
+  subsets: ["latin"],
+  variable: "--font-raleway",
+  weight: ["400", "600", "700"],
 });
 
 export const metadata: Metadata = {
@@ -25,9 +36,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${sora.variable} ${inter.variable} ${raleway.variable} antialiased `}
       >
-        {children}
+        <UserDataProvider>
+          <main>{children}</main>
+        </UserDataProvider>
+        <Toaster />
       </body>
     </html>
   );
