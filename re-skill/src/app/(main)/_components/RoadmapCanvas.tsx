@@ -16,6 +16,7 @@ import html2canvas from "html2canvas";
 import { Button } from "@/components/ui/button";
 import { LuDownload } from "react-icons/lu";
 import { toast } from "sonner";
+
 import { toPng } from "html-to-image";
 
 interface RoadmapProps {
@@ -127,15 +128,47 @@ export default function Roadmap({ roadmap }: RoadmapProps) {
     }
   };
 
+  const downloadWithHtml2Canvas = async () => {
+    try {
+      const target = document.querySelector(".react-flow__renderer");
+      if (!target) {
+        toast.error("React Flow canvas not found!");
+        return;
+      }
+
+      const canvas = await html2canvas(target as HTMLElement, {
+        backgroundColor: "#ffffff",
+        scale: 2,
+      });
+
+      const dataUrl = canvas.toDataURL("image/png");
+      
+      toast.success("Canvas downloaded successfully!");
+
+      const link = document.createElement("a");
+      link.download = `${roadmap.roadmapTitle || "roadmap"}-canvas.png`;
+      link.href = dataUrl;
+      link.click();
+    } catch (error) {
+      console.error("Error generating canvas:", error);
+      toast.error("Failed to generate canvas image");
+    }
+  };
+
   return (
     <>
       <div className="flex items-center gap-6 justify-center">
         <h2 className="text-xl font-bold mb-2 text-center font-inter mt-2">
           {roadmap.roadmapTitle}
         </h2>
-        <Button size="sm" onClick={downloadAsPNG}>
-          <LuDownload className="" />
-        </Button>
+        <div className="flex gap-2">
+           <Button size="sm" onClick={downloadAsPNG} title="Download with html-to-image">
+             <LuDownload className="" /> Image
+           </Button>
+           <Button size="sm" variant="outline" onClick={downloadWithHtml2Canvas} title="Download with html2canvas">
+             <LuDownload className="" /> Canvas
+           </Button>
+        </div>
       </div>
 
       <p className="text-gray-600  text-center font-inter">
