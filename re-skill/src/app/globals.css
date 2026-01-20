@@ -3,6 +3,13 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@theme {
+  /* FONTS */
+  --font-sora: "Sora", sans-serif;
+  --font-inter: "Inter", sans-serif;
+  --font-raleway:  "Raleway", sans-serif;
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -41,10 +48,40 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
-  --radius-2xl: calc(var(--radius) + 8px);
-  --radius-3xl: calc(var(--radius) + 12px);
-  --radius-4xl: calc(var(--radius) + 16px);
-}
+  --animate-marquee: marquee var(--duration) infinite linear;
+  --animate-marquee-vertical: marquee-vertical var(--duration) linear infinite;
+  @keyframes marquee {
+  from {
+    transform: translateX(0);
+    }
+  to {
+    transform: translateX(calc(-100% - var(--gap)));
+    }
+  }
+  @keyframes marquee-vertical {
+  from {
+    transform: translateY(0);
+    }
+  to {
+    transform: translateY(calc(-100% - var(--gap)));
+    }
+  }
+  --animate-gradient: gradient 8s linear infinite
+;
+  @keyframes gradient {
+  to {
+    background-position: var(--bg-size, 300%) 0;
+    }
+  }
+  --animate-shiny-text: shiny-text 8s infinite;
+  @keyframes shiny-text {
+  0%, 90%, 100% {
+    background-position: calc(-100% - var(--shiny-width)) 0;
+    }
+  30%, 60% {
+    background-position: calc(100% + var(--shiny-width)) 0;
+    }
+  }}
 
 :root {
   --radius: 0.625rem;
@@ -54,7 +91,7 @@
   --card-foreground: oklch(0.13 0.028 261.692);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.13 0.028 261.692);
-  --primary: oklch(0.21 0.034 264.665);
+  --primary: oklch(54.057% 0.25496 262.573);
   --primary-foreground: oklch(0.985 0.002 247.839);
   --secondary: oklch(0.967 0.003 264.542);
   --secondary-foreground: oklch(0.21 0.034 264.665);
@@ -122,4 +159,21 @@
   body {
     @apply bg-background text-foreground;
   }
+  /* For a specific scrollable container */
+.scroll-container {
+  overflow: auto; /* or scroll */
+}
+.scroll-container::-webkit-scrollbar {
+  display: none;
+}
+
+/* For the whole page */
+html, body {
+  height: 100%;
+  overflow: auto;
+}
+::-webkit-scrollbar {
+  display: none;
+}
+
 }
