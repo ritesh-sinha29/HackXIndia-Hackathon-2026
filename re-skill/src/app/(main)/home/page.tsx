@@ -418,9 +418,13 @@ export default function HomePage() {
                           >
                             {/* Left: avatar + details */}
                             <div className="flex items-center gap-3">
-                              <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center">
-                                <LuUser className="w-5 h-5 text-white" />
-                              </div>
+                              <Image
+                                src={u.avatar || "/user.png"}
+                                alt={u.userName}
+                                width={35}
+                                height={35}
+                                className=" rounded-full object-cover"
+                              />
                               <div>
                                 <p className="font-medium text-sm tracking-tight font-inter">
                                   {u.userName}
@@ -465,9 +469,13 @@ export default function HomePage() {
                         key={notif.id ?? Math.random()}
                         className="flex gap-2 p-1 bg-blue-50 border border-blue-200 rounded-md w-full"
                       >
-                        <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center shrink-0">
-                          <LuUser className="w-5 h-5 text-white" />
-                        </div>
+                        <Image
+                          src={user?.avatar || "/user.png"}
+                          alt="user"
+                          height={100}
+                          width={100}
+                          className="w-9 h-9 rounded-full object-cover"
+                        />
 
                         <div className="w-full">
                           <p className="text-xs tracking-wide font-light font-inter line-clamp-2">
