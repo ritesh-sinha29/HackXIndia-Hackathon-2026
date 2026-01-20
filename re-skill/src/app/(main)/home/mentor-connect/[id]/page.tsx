@@ -237,12 +237,15 @@ export default function MentorConnectPage() {
 
         {/* Main avatar NOT clipped */}
         <div className="absolute -bottom-14 left-44  flex items-center gap-10">
-          <Image
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
             src={mentor?.avatar || "/user.png"}
             alt="avatar"
-            width={180}
-            height={180}
-            className="rounded-full border-4 border-gray-100"
+            className="rounded-full border-4 border-gray-100 w-[180px] h-[180px] object-cover"
+            onError={(e) => {
+              const target = e.target as HTMLImageElement;
+              target.src = "/user.png";
+            }}
           />
           <div className="-mt-7">
             <h2 className="text-black text-2xl capitalize font-sora font-semibold">
@@ -432,12 +435,15 @@ export default function MentorConnectPage() {
                   className="flex flex-col items-center gap-4 p-3 rounded-xl border shadow-sm bg-white "
                 >
                   <div className="flex items-center justify-center gap-6 relative">
-                    <Image
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
                       src={mentor.avatar || "/user.png"}
                       alt={mentor.full_name}
-                      width={100}
-                      height={100}
                       className="w-12 h-12 rounded-full object-cover"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.src = "/user.png";
+                      }}
                     />
                     <div className="absolute left-0 top-10 rounded-full border border-yellow-500 bg-yellow-50 py-1 px-2 text-xs tracking-tight">
                       <span className="text-yellow-600 ">

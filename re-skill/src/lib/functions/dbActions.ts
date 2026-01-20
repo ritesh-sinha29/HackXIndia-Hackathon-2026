@@ -19,6 +19,7 @@ interface PaginatedMentors {
   mentors: DBMentor[];
   hasMore: boolean;
   total: number;
+  exactMatches: number;
 }
 export interface MentorVideo {
   id: string;
@@ -71,7 +72,8 @@ export async function getMatchingMentors(
 
 export async function getAllMentorsPaginated(
   page: number = 1,
-  limit: number = 6
+  limit: number = 6,
+  career?: string
 ): Promise<PaginatedMentors> {
   const supabase = createClient();
 
@@ -86,13 +88,21 @@ export async function getAllMentorsPaginated(
 
   if (error) {
     console.error("Mentors fetch error:", error);
-    return { mentors: [], hasMore: false, total: 0 };
+    return { mentors: [], hasMore: false, total: 0, exactMatches: 0 };
   }
 
   const hasMore = count !== null ? end + 1 < count : false;
   const total = count || 0;
 
-  const result: PaginatedMentors = { mentors: data || [], hasMore, total };
+  // Calculate exact matches if career is provided
+  let exactMatches = 0;
+  if (career && data) {
+    exactMatches = data.filter(
+      (mentor) => mentor.current_position?.toLowerCase() === career.toLowerCase()
+    ).length;
+  }
+
+  const result: PaginatedMentors = { mentors: data || [], hasMore, total, exactMatches };
 
   return result;
 }

@@ -94,6 +94,9 @@ export default function MentorConnect() {
       return [...prev, ...newMentors];
     });
 
+    console.log("🔍 Loaded mentors:", newMentors);
+    console.log("🖼️ First mentor avatar:", newMentors[0]?.avatar);
+
     setHasMore(hasMore);
     setTotalMentors(total);
     setExactMatches(exactMatches);
@@ -283,12 +286,15 @@ export default function MentorConnect() {
                     </div>
                   )}
 
-                  <Image
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
                     src={mentor?.avatar || "/user.png"}
                     alt={mentor?.full_name || "User"}
-                    width={75}
-                    height={75}
-                    className="rounded-full border border-gray-200 absolute top-5 left-5 z-20"
+                    className="rounded-full border border-gray-200 absolute top-5 left-5 z-20 object-cover w-[75px] h-[75px]"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.src = "/user.png";
+                    }}
                   />
                   <div className="absolute top-0 right-0 w-16 h-16">
                     <div className="w-full h-full bg-white/25 rounded-tr-2xl rotate-45 transform origin-top-right"></div>

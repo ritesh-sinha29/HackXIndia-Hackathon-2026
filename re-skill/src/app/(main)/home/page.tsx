@@ -318,13 +318,16 @@ export default function HomePage() {
 
                             {/* 🔹 Avatar */}
                             <div className="relative z-10">
-                              <Image
-                                src={getAvatar(m)}
-                                alt={m.full_name}
-                                width={95}
-                                height={95}
-                                className="rounded-full object-cover border mx-auto"
-                              />
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img
+                              src={getAvatar(m)}
+                              alt={m.full_name}
+                              className="rounded-full object-cover border mx-auto w-[95px] h-[95px]"
+                              onError={(e) => {
+                                const target = e.target as HTMLImageElement;
+                                target.src = "/user.png";
+                              }}
+                            />
 
                               <div className="absolute left-1/2 -translate-x-1/2 -bottom-1 bg-white border border-yellow-600 px-4 rounded-full">
                                 <span className="font-inter text-sm font-medium text-amber-500 flex items-center gap-1">
