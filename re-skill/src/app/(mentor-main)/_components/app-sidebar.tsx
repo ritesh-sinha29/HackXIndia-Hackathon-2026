@@ -70,7 +70,7 @@ import { useAssistantSheetStore } from "@/lib/store/useAssistantSheet";
 import { LuChartNoAxesColumn } from "react-icons/lu";
 
 export function AppSidebar() {
-  const { mentor, loading, setMentor, setUser } = useUserData();
+  const { mentor, loading } = useUserData();
   const supabase = createClient();
   const router = useRouter();
   const [signoutLoading, setSignoutLoading] = useState(false);
@@ -80,8 +80,6 @@ export function AppSidebar() {
     setSignoutLoading(true);
     try {
       await supabase.auth.signOut();
-      setMentor(null);
-      setUser(null);
       toast.success("Signed out successfully");
       router.push("/auth-mentor");
     } catch (error) {
@@ -116,10 +114,11 @@ export function AppSidebar() {
         {/* DASHBOARD */}
         <SidebarMenuItem
           className={`flex cursor-pointer duration-200 ease-in-out rounded py-1 px-3
-      ${pathname === "/dashboard"
-              ? "bg-blue-400 scale-105 hover:bg-white/10"
-              : "hover:bg-white/10 hover:scale-105"
-            }`}
+      ${
+        pathname === "/dashboard"
+          ? "bg-blue-400 scale-105 hover:bg-white/10"
+          : "hover:bg-white/10 hover:scale-105"
+      }`}
         >
           <Link href="/dashboard" className="w-full">
             <p className="flex items-center gap-3 font-medium font-inter text-base text-white tracking-wide">
@@ -129,12 +128,13 @@ export function AppSidebar() {
           </Link>
         </SidebarMenuItem>
         {/* ALL REQUEST + HISTORY */}
-        <SidebarMenuItem
+         <SidebarMenuItem
           className={`flex cursor-pointer duration-200 ease-in-out rounded py-1 px-3
-      ${pathname === "/dashboard/history"
-              ? "bg-blue-400 scale-105 hover:bg-white/10"
-              : "hover:bg-white/10 hover:scale-105"
-            }`}
+      ${
+        pathname === "/dashboard/history"
+          ? "bg-blue-400 scale-105 hover:bg-white/10"
+          : "hover:bg-white/10 hover:scale-105"
+      }`}
         >
           <Link href="/dashboard/upload" className="w-full">
             <p className="flex items-center gap-3 font-medium font-inter text-base text-white tracking-wide">
@@ -147,10 +147,11 @@ export function AppSidebar() {
         {/* MESSAGES */}
         <SidebarMenuItem
           className={`flex cursor-pointer duration-200 ease-in-out rounded py-1 px-3
-      ${pathname === "/dashboard/messages"
-              ? "bg-blue-400 scale-105 hover:bg-white/10"
-              : "hover:bg-white/10 hover:scale-105"
-            }`}
+      ${
+        pathname === "/dashboard/messages"
+          ? "bg-blue-400 scale-105 hover:bg-white/10"
+          : "hover:bg-white/10 hover:scale-105"
+      }`}
         >
           <Link href="/dashboard/messages" className="w-full">
             <p className="flex items-center gap-3 font-medium font-inter text-base text-white tracking-wide">
@@ -163,10 +164,11 @@ export function AppSidebar() {
         {/* CALENDAR */}
         <SidebarMenuItem
           className={`flex cursor-pointer duration-200 ease-in-out rounded py-1 px-3
-      ${pathname === "/dashboard/calender"
-              ? "bg-blue-400 scale-105 hover:bg-white/10"
-              : "hover:bg-white/10 hover:scale-105"
-            }`}
+      ${
+        pathname === "/dashboard/calender"
+          ? "bg-blue-400 scale-105 hover:bg-white/10"
+          : "hover:bg-white/10 hover:scale-105"
+      }`}
         >
           <Link href="/dashboard/calender" className="w-full">
             <p className="flex items-center gap-3 font-medium font-inter text-base text-white tracking-wide">
@@ -179,10 +181,11 @@ export function AppSidebar() {
         {/* UPLOAD VIDEO */}
         <SidebarMenuItem
           className={`flex cursor-pointer duration-200 ease-in-out rounded py-1 px-3
-      ${pathname === "/dashboard/upload"
-              ? "bg-blue-400 scale-105 hover:bg-white/10"
-              : "hover:bg-white/10 hover:scale-105"
-            }`}
+      ${
+        pathname === "/dashboard/upload"
+          ? "bg-blue-400 scale-105 hover:bg-white/10"
+          : "hover:bg-white/10 hover:scale-105"
+      }`}
         >
           <Link href="/dashboard/upload" className="w-full">
             <p className="flex items-center gap-3 font-medium font-inter text-base text-white tracking-wide">
@@ -192,7 +195,7 @@ export function AppSidebar() {
           </Link>
         </SidebarMenuItem>
 
-
+        
       </SidebarContent>
 
       <SidebarFooter className="px-1 overflow-hidden">

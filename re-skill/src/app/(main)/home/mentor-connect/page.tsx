@@ -6,6 +6,7 @@ import {
   LuBook,
   LuBookMarked,
   LuFilter,
+  LuGraduationCap,
   LuHistory,
   LuLinkedin,
   LuLoader,
@@ -32,6 +33,7 @@ import { Video } from "@imagekit/next";
 import { useUserData } from "@/context/UserDataProvider";
 import { useRouter } from "next/navigation";
 import styled from "styled-components";
+import { useQuizData } from "@/context/userQuizProvider";
 
 const fallbackAvatars = [
   "/a1.png",
@@ -48,6 +50,7 @@ interface MentorVideo {
 
 export default function MentorConnect() {
   const { user } = useUserData();
+  const { quizData } = useQuizData();
   const [mentorData, setMentorData] = useState<DBMentor[]>([]);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
@@ -58,6 +61,8 @@ export default function MentorConnect() {
   const [videos, setVideos] = useState<MentorVideo[]>([]);
   const [loadingVideo, setLoadingVideo] = useState(true);
   const router = useRouter();
+
+  const [exactMatches, setExactMatches] = useState(0);
 
   useEffect(() => {
     if (!user) return;
@@ -74,8 +79,13 @@ export default function MentorConnect() {
     const {
       mentors: newMentors,
       hasMore,
+      exactMatches,
       total: total,
-    } = await getAllMentorsPaginated(pageNum, 6);
+    } = await getAllMentorsPaginated(
+      pageNum,
+      6,
+      quizData?.selectedCareer || "software engineer"
+    );
 
     setMentorData((prev) => {
       if (pageNum === 1) {
@@ -86,12 +96,15 @@ export default function MentorConnect() {
 
     setHasMore(hasMore);
     setTotalMentors(total);
+    setExactMatches(exactMatches);
     setLoadingMentors(false);
   };
 
+  // console.log("Mentor data---------->",mentorData);
+
   useEffect(() => {
     loadMentors(1);
-  }, []);
+  }, [quizData?.selectedCareer]);
   const borderColors = [
     "border-blue-500",
     "border-green-500",
@@ -99,7 +112,7 @@ export default function MentorConnect() {
     "border-pink-500",
   ];
   const bgColors = [
-    "bg-red-500",
+    "bg-yellow-500",
     "bg-blue-500",
     "bg-green-500",
     "bg-yellow-500",
@@ -192,18 +205,24 @@ export default function MentorConnect() {
             Discover More By Category
           </h2>
           <div className="flex items-center gap-1 font-inter text-sm bg-white p-2 shadow rounded-lg">
-            <Award className="w-7 h-7 text-blue-500 " />
-            Top Rated Mentors
+            <LuGraduationCap className="w-7 h-7 text-blue-500 " />
+            {quizData?.selectedCareer}
           </div>
         </div>
 
-        <div className=" w-full mx-auto flex items-center justify-between  px-4 py-2 my-6">
-          <p className="font-inter text-base ">
-            <span className="font-semibold">45</span> Mentors Found
+        <div className=" w-full mx-auto flex items-center justify-between  px-2 py-2 my-6">
+          <p className="font-inter text-base">
+            <span className="font-semibold">{totalMentors}</span> Mentors
+            Fetched
+          </p>
+
+          <p className="font-inter text-base tracking-tight text-yellow-600">
+            <span className="font-semibold">{exactMatches}</span> Exact Matches
+            Found
           </p>
           <div className="flex items-center gap-5">
             {/* Search Bar */}
-            <div className="flex items-center w-[320px] bg-white border border-gray-200 rounded-lg px-3 ">
+            <div className="flex items-center w-[300px] bg-white border border-gray-200 rounded-lg px-3 ">
               <LuSearch className="text-lg text-gray-600 ml-2" />
               <Input
                 placeholder="Search mentors"
@@ -221,7 +240,11 @@ export default function MentorConnect() {
               Available
             </div>
             {/* Bookings */}
-            <Button className="font-inter text-sm cursor-pointer" variant="outline" onClick={()=>router.push("/home/mentor-connect/bookings")}>
+            <Button
+              className="font-inter text-sm cursor-pointer"
+              variant="outline"
+              onClick={() => router.push("/home/mentor-connect/bookings")}
+            >
               <LuHistory className="mr-2" />
               My Bookings
             </Button>
@@ -241,10 +264,25 @@ export default function MentorConnect() {
             return (
               <div
                 key={mentor.id}
-                className="bg-white border border-gray-200 shadow-md rounded-md h-[300px] w-[330px] overflow-hidden relative flex flex-col"
+                className={`bg-white border border-gray-200 shadow-md rounded-md h-[300px] w-[330px] relative flex flex-col 
+    ${
+      quizData?.selectedCareer?.toLowerCase() ===
+      mentor?.current_position?.toLowerCase()
+        ? "shadow-pink-200"
+        : ""
+    }`}
               >
                 {/* HEADER */}
-                <div className={`h-16 ${bgColor} w-full relative`}>
+                <div className={`h-16 ${bgColor} w-full relative rounded-sm`}>
+                  {quizData?.selectedCareer?.toLowerCase() ===
+                    mentor?.current_position && (
+                    <div className="bg-white border border-yellow-500 shadow-md px-2 py-1 absolute -top-5 left-1/2 -translate-x-1/2 rounded-full">
+                      <h3 className="text-sm font-inter tracking-tight">
+                        Recommended
+                      </h3>
+                    </div>
+                  )}
+
                   <Image
                     src={mentor?.avatar || "/user.png"}
                     alt={mentor?.full_name || "User"}
@@ -277,10 +315,16 @@ export default function MentorConnect() {
                   <h3 className="font-inter text-base text-muted-foreground capitalize">
                     {mentor?.current_position}
                   </h3>
-                  <h2 className="text-sm font-inter mt-3 text-center">
+                  <h2 className="text-sm font-inter mt-3 text-center line-clamp-2">
                     <span className="font-semibold">Expertise: </span>
                     {mentor?.expertise?.join(" , ") || "No expertise added"}
                   </h2>
+
+                  <p className="text-center mt-2 capitalize font-semibold text-yellow-500 font-sora  text-sm ">
+                    {quizData?.selectedCareer?.toLowerCase() ===
+                      mentor?.current_position?.toLowerCase() &&  
+                      "Perfect match"}
+                  </p>
 
                   {/* FOOTER  */}
                   <div className="mt-auto pb-3">

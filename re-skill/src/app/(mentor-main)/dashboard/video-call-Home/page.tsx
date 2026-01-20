@@ -19,7 +19,6 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
-import { SupabaseService } from "@/lib/videocall/supabaseService";
 import { createClient } from "@/lib/supabase/client";
 import { useUserData } from "@/context/UserDataProvider";
 
@@ -55,19 +54,11 @@ const VideoCallHome = () => {
       return;
     }
 
-    if (!mentor?.id) {
-      toast.error("Mentor profile not found! Please try again.");
-      return;
-    }
-
     setLoading(true);
 
     try {
-      // 1. Create a new room in the 'rooms' table
-      const room = await SupabaseService.createRoom(mentor.id, 60); // Defaulting to 60 minutes
-      const vcLink = room.id;
+      const vcLink = `${activeSession.session_id}`;
 
-      // 2. Update the mentor_session with the room ID (vc_link)
       const { error } = await supabase
         .from("mentor_sessions")
         .update({ vc_link: vcLink })

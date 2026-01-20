@@ -54,26 +54,11 @@ import { toast } from "sonner";
 
 
 export default function Navbar() {
-  const { mentor, loading, setMentor, setUser } = useUserData();
+  const { mentor, loading } = useUserData();
 
   const supabase = createClient();
   const router = useRouter();
   const [signoutLoading, setSignoutLoading] = useState(false);
-
-  async function signOut() {
-    setSignoutLoading(true);
-    try {
-      await supabase.auth.signOut();
-      setMentor(null);
-      setUser(null);
-      toast.success("Signed out successfully");
-      router.push("/auth-mentor");
-    } catch (error) {
-      console.error("Error signing out:", error);
-    } finally {
-      setSignoutLoading(false);
-    }
-  }
 
   return (
     <div className="bg-white border-b-[1px] border-gray-200 pt-3 pb-1 px-4 pr-8 flex items-center gap-10 justify-between ">
@@ -201,7 +186,7 @@ export default function Navbar() {
                         <Button
                           disabled={signoutLoading}
                           className="bg-blue-500 text-white hover:bg-blue-700 font-inter cursor-pointer"
-                          onClick={signOut}
+                          // onClick={signOut}
                         >
                           {signoutLoading ? (
                             <>
