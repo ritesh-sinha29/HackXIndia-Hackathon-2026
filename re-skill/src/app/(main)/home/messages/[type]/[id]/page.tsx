@@ -124,12 +124,22 @@ const MessagesId = () => {
       (payload) => {
         const newMessage = payload.new as Message;
 
-        // Only add if it belongs to this conversation
+        // Only add if it belongs to this conversation AND not already in state (to avoid duplicates)
         if (
-          (newMessage.sender_id === String(user.id) && newMessage.receiver_id === profileId) ||
-          (newMessage.sender_id === profileId && newMessage.receiver_id === String(user.id))
+          ((newMessage.sender_id === String(user.id) && newMessage.receiver_id === String(profileId)) ||
+          (newMessage.sender_id === String(profileId) && newMessage.receiver_id === String(user.id)))
         ) {
-          setMessages((prev) => [...prev, newMessage]);
+          setMessages((prev) => {
+            // Avoid duplicates
+            if (prev.some(msg => msg.id === newMessage.id)) {
+              return prev;
+            }
+            return [...prev, newMessage];
+          });
+          // Scroll to bottom on new message
+          setTimeout(() => {
+            bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+          }, 100);
         }
       }
     )
@@ -143,24 +153,33 @@ const MessagesId = () => {
   const sendMessage = async () => {
     if (!text.trim() || !user?.id || !profileId || !profileType) return;
 
-    const { error } = await supabase.from("messages").insert({
-      sender_id: user.id,
-      receiver_id: profileId,
+    const messageContent = text;
+    setText(""); // Clear input immediately for better UX
+
+    const { data, error } = await supabase.from("messages").insert({
+      sender_id: String(user.id),
+      receiver_id: String(profileId),
       receiver_type: profileType,
-      content: text,
-    });
+      content: messageContent,
+    }).select().single();
 
     if (error) {
       console.error("Send error:", error);
-    } else {
-      setText(""); 
+      setText(messageContent); // Restore text on error
+    } else if (data) {
+      // Optimistically add message to UI
+      setMessages((prev) => [...prev, data as Message]);
+      // Scroll to bottom
+      setTimeout(() => {
+        bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+      }, 100);
     }
   };
 
   return (
-    <div className="w-full bg-white border rounded-md h-full overflow-hidden">
+    <div className="w-full bg-white border rounded-md h-[calc(100vh-100px)] flex flex-col overflow-hidden">
       {/* Profile Header */}
-      <div className="flex items-center gap-3 mb-5 bg-blue-500 py-2 px-6">
+      <div className="flex items-center gap-3 bg-blue-500 py-2 px-6 flex-shrink-0">
         <Image
           src={profile?.avatar || "/user.png"}
           alt={profile?.name || "User"}
@@ -175,13 +194,13 @@ const MessagesId = () => {
           <p className="text-base text-gray-200 font-sora">{profile?.email}</p>
         </div>
       </div>
-      <p className="text-muted-foreground text-base font-inter px-6 my-2">
+      <p className="text-muted-foreground text-base font-inter px-6 py-2 flex-shrink-0">
         Keep the conversation formal and professional. Any inappropriate
         messages will be Reported.
       </p>
 
       {/* Messages container */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-2 bg-blue-50 h-[470px]">
+      <div className="flex-1 overflow-y-auto p-4 space-y-2 bg-blue-50">
         {messages.length === 0 ? (
           <div className="flex items-center justify-center h-full text-xl font-sora">
             No old messages found
@@ -208,12 +227,19 @@ const MessagesId = () => {
             </div>
           ))
         )}
+        <div ref={bottomRef} />
       </div>
-      <div className="flex border-t p-3 gap-2 ">
+      <div className="flex border-t p-3 gap-2 bg-white flex-shrink-0">
         <Input
           placeholder="Type a message..."
           value={text}
           onChange={(e) => setText(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              sendMessage();
+            }
+          }}
           className="flex-1 bg-blue-100"
         />
         <Button onClick={sendMessage}>
