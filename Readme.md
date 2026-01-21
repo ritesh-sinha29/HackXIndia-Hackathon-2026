@@ -6,7 +6,7 @@
 [![Live Demo](https://img.shields.io/badge/Live-Demo-blue?style=for-the-badge&logo=vercel)]( - )
 
 An AI-powered career guidance platform that helps students navigate their career journey from confusion to clarity.
-<div align="center">
+<div align="left">
   
 
 ## 🚀 Problem Statement
