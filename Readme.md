@@ -5,7 +5,7 @@
 [![Demo Video](https://img.shields.io/badge/Demo-Watch%20Video-red?style=for-the-badge&logo=youtube)]( - )
 [![Live Demo](https://img.shields.io/badge/Live-Demo-blue?style=for-the-badge&logo=vercel)]( - )
 
-An AI-powered career guidance platform that helps students navigate their career journey from confusion to clarity. Built by **Team ROX**.
+An AI-powered career guidance platform that helps students navigate their career journey from confusion to clarity.
 <div align="center">
   
 [![Watch Demo Video](https://img.shields.io/badge/Demo-Click%20here%20to%20Watch%20Video-red?style=for-the-badge&logo=youtube)]( - )
