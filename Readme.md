@@ -3,8 +3,9 @@
 > **Clarity today, Success follows tomorrow**
 
 [![Demo Video](https://drive.google.com/file/d/1BKSU9x7LDeEVaBsRk_P2tT3tjpGZXQFK/view?usp=sharing)]( - )
-[![Live Demo](https://drive.google.com/file/d/1BKSU9x7LDeEVaBsRk_P2tT3tjpGZXQFK/view?usp=sharing)](https://hack-x-india-rox-2026.vercel.app)
+[![Live Demo](hack-x-india-rox-2026.vercel.app)
 
+Live Link -> hack-x-india-rox-2026.vercel.app
 Video Link Google drive->  https://drive.google.com/file/d/1BKSU9x7LDeEVaBsRk_P2tT3tjpGZXQFK/view?usp=sharing
 
 An AI-powered career guidance platform that helps students navigate their career journey from confusion to clarity.
