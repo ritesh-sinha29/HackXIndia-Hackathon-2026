@@ -20,7 +20,7 @@ export function AnimatedGradientTextDemo() {
       />
       🎉 <hr className="mx-2 h-4 w-px shrink-0 bg-gray-300" />
       <AnimatedGradientText className="text-base font-medium font-inter">
-        Introducing Clario
+        Introducing Re:Skill
       </AnimatedGradientText>
       <ChevronRight
         className="ml-1 size-4 stroke-gray-300 transition-transform
