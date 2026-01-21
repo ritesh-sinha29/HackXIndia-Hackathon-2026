@@ -4,29 +4,13 @@
 import Image from "next/image";
 import { MarqueeDemo } from "./_components/MarqueeLogin";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { useRef, useState } from "react";
-import { LuChevronRight, LuInfo, LuLoader } from "react-icons/lu";
 import { AnimatedGradientTextDemo } from "./_components/GradientText";
-// import Silk from "@/components/Silk/Silk";
-import { toast } from "sonner";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
-// import HCaptcha from "@hcaptcha/react-hcaptcha";
 import Link from "next/link";
 
 export default function AuthPage() {
-  // const captchaRef = useRef<HCaptcha>(null);
   const router = useRouter();
-  const [token, setToken] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string>("");
-
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  // signup - create account, signin - login
-  const [isSignup, setIsSignup] = useState<boolean>(false);
   const supabase = createClient();
 
   const handleLogin = async (provider: "google" | "discord" | "slack_oidc") => {
@@ -42,58 +26,15 @@ export default function AuthPage() {
 
     if (error) {
       console.error("Login error:", error.message);
-      toast.error(error.message);
     }
   };
 
-  async function HandleAuth() {
-    setLoading(true);
-    setError("");
-    try {
-      if (isSignup) {
-        // signup functionality
-        const { data, error } = await supabase.auth.signUp({
-          email,
-          password,
-          options: {
-            emailRedirectTo: `${window.location.origin}/email-verified`,
-            // captchaToken: token || undefined,
-            data: { role: "user" },
-          },
-        });
 
-        if (error) throw error;
-        // for email verification
-        if (data.user && !data.session) {
-          setError("Please check your email for verification link");
-          return;
-        }
-      } else {
-        // login functionality
-        const { data, error } = await supabase.auth.signInWithPassword({
-          email,
-          password,
-          options: {
-            // captchaToken: token || undefined,
-          },
-        });
-
-        if (error) throw error;
-        if (data.session) {
-          router.push("/auth/callback");
-        }
-      }
-    } catch (err: any) {
-      setError(err.error_description || err.message);
-    } finally {
-      setLoading(false);
-    }
-  }
   return (
-    <section>
-      <main className="flex lg:flex-row gap-10">
+    <section className="h-screen overflow-hidden">
+      <main className="flex flex-col lg:flex-row h-full">
         {/* LEFT SIDE */}
-        <div className="flex-1">
+        <div className="flex-1 min-h-screen lg:min-h-0">
           <div className="w-full h-full flex flex-col items-center justify-center">
             <div className="flex items-center mb-10 cursor-pointer">
               <Link href="/web">
@@ -149,96 +90,24 @@ export default function AuthPage() {
                 continue with Slack
               </Button>
             </div>
-            {/* ---- */}
-            {/* <p className="font-inter text-base font-light my-7">
-              {" "}
-              or continue with{" "}
-              <span className="font-medium font-raleway  text-blue-500  ml-4">
-                {isSignup ? "Creating Account" : "Logging In"}
-              </span>
-            </p> */}
 
             <div className="flex flex-col gap-5 w-full max-w-[320px] mx-auto mt-8">
-              {/* <div className="flex items-center justify-center gap-2 ">
-                <Label className="font-inter">Email</Label>
-                <Input
-                  placeholder="Enter your email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full rounded border "
-                />
-              </div> */}
-              {/* <div className="flex items-center justify-center gap-2 ">
-                <Label className="font-inter">Pass</Label>
-                <Input
-                  placeholder="Enter your password"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full rounded border "
-                /> */}
-              </div>
-              {/* 👇 hCaptcha here */}
-              {/* <HCaptcha
-                sitekey={process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY!}
-                onVerify={(captchaToken) => setToken(captchaToken)}
-                ref={captchaRef}
-                // size="invisible"
-                //  size="compact"
-              /> */}
-
-              <Button
-                className="gap-5 w-full max-w-[280px] rounded border font-sora cursor-pointer bg-black"
-                disabled={loading}
-                onClick={HandleAuth}
-              >
-                {loading ? (
-                  <>
-                    <LuLoader className="animate-spin" />
-                    {isSignup ? "Signing up..." : "Signing in..."}
-                  </>
-                ) : (
-                  <>
-                    {isSignup ? "Sign Up" : "Sign In"}
-                    <LuChevronRight />{" "}
-                  </>
-                )}
-              </Button>
-
-              <p className="font-inter text-sm font-light mt-5">
-                {isSignup
-                  ? "Already have an account?"
-                  : "Don't have an account?"}{" "}
-                <span
-                  className="font-medium text-blue-500 text-sm font-raleway cursor-pointer"
-                  onClick={() => setIsSignup(!isSignup)}
-                >
-                  {isSignup ? "Sign In" : "Sign Up"}
-                </span>
-              </p>
-
               <p
                 onClick={() => router.push("/auth-mentor")}
-                className="text-base font-medium"
+                className="text-base font-medium text-center cursor-pointer"
               >
                 {" "}
-                Are you a Mentor ?{" "}
+                  Are you a Mentor ?{" "}
                 <span className="text-blue-500 cursor-pointer">
                   Click here!
                 </span>
               </p>
             </div>
-
-            {error && (
-              <p className="font-raleway text-sm text-muted-foreground text-center mt-10">
-                <LuInfo className="mr-2 inline" /> {error}
-              </p>
-            )}
           </div>
+        </div>
        
         {/* RIGHT SIDE */}
-        <div className="h-screen w-[55%] bg-blue-700 relative">
+        <div className="hidden lg:flex h-screen w-full lg:w-[55%] bg-blue-700 relative">
           <div
             className="absolute inset-0 z-0"
             style={{
