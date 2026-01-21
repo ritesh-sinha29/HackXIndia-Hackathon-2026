@@ -2,9 +2,6 @@
 
 > **Clarity today, Success follows tomorrow**
 
-[![Demo Video](https://drive.google.com/file/d/1BKSU9x7LDeEVaBsRk_P2tT3tjpGZXQFK/view?usp=sharing)]( - )
-[![Live Demo](hack-x-india-rox-2026.vercel.app)
-
 Live Link -> hack-x-india-rox-2026.vercel.app 
 
 Video Link Google drive->  https://drive.google.com/file/d/1BKSU9x7LDeEVaBsRk_P2tT3tjpGZXQFK/view?usp=sharing
