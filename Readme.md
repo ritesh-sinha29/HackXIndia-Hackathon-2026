@@ -3,7 +3,7 @@
 > **Clarity today, Success follows tomorrow**
 
 [![Demo Video](https://img.shields.io/badge/Demo-Watch%20Video-red?style=for-the-badge&logo=youtube)]( - )
-[![Live Demo](https://img.shields.io/badge/Live-Demo-blue?style=for-the-badge&logo=vercel)]( - )
+[![Live Demo](https://img.shields.io/badge/Live-Demo-blue?style=for-the-badge&logo=vercel)](https://hack-x-india-rox-2026.vercel.app)
 
 An AI-powered career guidance platform that helps students navigate their career journey from confusion to clarity.
 <div align="left">
