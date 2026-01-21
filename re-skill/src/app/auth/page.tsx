@@ -37,7 +37,7 @@ export default function AuthPage() {
         <div className="flex-1 min-h-screen lg:min-h-0">
           <div className="w-full h-full flex flex-col items-center justify-center">
             <div className="flex items-center mb-10 cursor-pointer">
-              <Link href="/web">
+              <Link href="/">
                 <Image
                   src="/reskill2.png"
                   alt="logo"
