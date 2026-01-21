@@ -8,11 +8,6 @@
 An AI-powered career guidance platform that helps students navigate their career journey from confusion to clarity.
 <div align="center">
   
-[![Watch Demo Video](https://img.shields.io/badge/Demo-Click%20here%20to%20Watch%20Video-red?style=for-the-badge&logo=youtube)]( - )
-
-  <div align="center"> 
-  <img src="public/Loginpage.png" alt="Login Page" width="600">
-  <div align="left">
 
 ## 🚀 Problem Statement
 
